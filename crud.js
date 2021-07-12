@@ -29,7 +29,7 @@ module.exports = (method, data, res, project) => {
           // Checks if data should be filtered
           if (keys.length == 0) {
             // Displays all results
-            const json = await proj.issues.map((i) => {
+            const json = proj.issues.map((i) => {
               return {
                 _id: i._id,
                 issue_title: i.issue_title,
