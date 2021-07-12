@@ -49,6 +49,8 @@ module.exports = async (project, projects, issues, res, data) => {
                 assigned_to: is.assigned_to,
                 status_text: is.status_text,
                 open: is.open,
+                created_on: is.created_on,
+                updated_on: is.updated_on,
               });
             }
           }

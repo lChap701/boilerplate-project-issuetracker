@@ -18,9 +18,6 @@ suite("Functional Tests", function () {
         issue_title: "Test 1",
         issue_text: "Testing all fields",
         created_by: "Lucas Chapman",
-        assigned_to: "John Smith",
-        status_text: "Closed",
-        open: false,
       };
 
       chai
@@ -32,23 +29,13 @@ suite("Functional Tests", function () {
             console.log(err);
           } else {
             const json = JSON.parse(res.text);
-            id = json._id;
 
-            assert.ownInclude(
+            assert.isObject(json, "The returned data should be an object");
+            assert.nestedInclude(
               json,
               data,
-              `'${res.text}' does not include '${JSON.stringify(data)}'`
+              `'${res.text}' should match '${JSON.stringify(data)}'`
             );
-
-            const keys = Object.keys(data);
-            keys.forEach((key) => {
-              assert.deepPropertyVal(
-                json,
-                key,
-                data[key],
-                `'${res.text}' should have a property of ${key} that is equal to ${data[key]}`
-              );
-            });
           }
         });
     });
@@ -69,11 +56,48 @@ suite("Functional Tests", function () {
           if (err) {
             console.log(err);
           } else {
-            assert.ownInclude(
-              JSON.parse(res.text),
+            const json = JSON.parse(res.text);
+
+            assert.isObject(json, "The returned data should be an object");
+
+            assert.nestedInclude(
+              json,
               data,
-              `'${res.text}' does not include '${JSON.stringify(data)}'`
+              `'${res.text}' should match '${JSON.stringify(data)}'`
             );
+
+            assert.property(
+              json,
+              "created_on",
+              "Missing 'created_on' property"
+            );
+            assert.isNumber(
+              Date.parse(json.created_on),
+              "'created_on' property should be a number"
+            );
+            assert.property(
+              json,
+              "updated_on",
+              "Missing 'updated_on' property"
+            );
+            assert.isNumber(
+              Date.parse(json.updated_on),
+              "'updated_on' property should be a number"
+            );
+            assert.property(json, "open", "Missing 'open' property");
+            assert.isBoolean(
+              json.open,
+              "'open' property should be a boolean value"
+            );
+            assert.isTrue(json.open, "'open' property should be 'true'");
+            assert.property(json, "_id", "'_id' property is missing");
+            assert.isNotEmpty(json._id, "'_id' should not be empty");
+            assert.property(
+              json,
+              "status_text",
+              "'status_text' property is missing"
+            );
+            assert.isEmpty(json.status_text, "'status_text' should be empty");
           }
         });
     });
@@ -94,12 +118,14 @@ suite("Functional Tests", function () {
           if (err) {
             console.log(err);
           } else {
+            const json = JSON.parse(res.text);
+
+            assert.isObject(json);
+            assert.property(json, "error");
             assert.equal(
-              res.text,
-              JSON.stringify({ error: "required field(s) missing" }),
-              `${res.text} does not equal ${JSON.stringify({
-                error: "required field(s) missing",
-              })}`
+              json.error,
+              "required field(s) missing",
+              `${json.error} does not equal 'required field(s) missing'`
             );
           }
         });
@@ -197,7 +223,7 @@ suite("Functional Tests", function () {
                 JSON.parse(res.text),
                 "result",
                 "successfully updated",
-                `'${res.text}' should have a property of 'result' that is equal to 'successfully updated'`
+                `'${res.text}' should have a property of 'error' that is equal to 'missing _id'`
               );
             }
           });
