@@ -47,7 +47,7 @@ suite("Functional Tests", function () {
       // Represents the data that will be sent during this test
       const data = {
         issue_title: "Test 2",
-        issue_text: "Testing only required fields fields",
+        issue_text: "Testing only required fields",
         created_by: "Lucas Chapman",
       };
 
@@ -145,8 +145,6 @@ suite("Functional Tests", function () {
 
   suite("GET /api/issues/ Tests", () => {
     test("1)  View Issues Test", () => {
-      const data = [{ issue_title: "Test 1" }];
-
       chai
         .request(server)
         .get(PATH + "test")
@@ -154,7 +152,42 @@ suite("Functional Tests", function () {
           if (err) {
             console.log(err);
           } else {
-            assert.notEqual(JSON.parse(res.text), [], "Returned nothing!");
+            const json = JSON.parse(res.text);
+
+            assert.notEqual(json, [], "Returned nothing!");
+
+            json.forEach((j) => {
+              assert.property(
+                j,
+                "issue_title",
+                "Missing 'issue_title' property"
+              );
+
+              assert.property(j, "issue_text", "Missing 'issue_text' property");
+              assert.property(j, "created_by", "Missing 'created_by' property");
+
+              assert.property(
+                j,
+                "assigned_to",
+                "Missing 'assigned_to' property"
+              );
+
+              assert.property(
+                j,
+                "status_text",
+                "Missing 'status_text' property"
+              );
+
+              assert.property(j, "open", "Missing 'open' property");
+              assert.property(j, "created_on", "Missing 'created_on' property");
+              assert.property(
+                j,
+                "updated_on",
+                "Missing 'updated_on' property'"
+              );
+
+              assert.property(j, "_id", "Missing '_id' property");
+            });
           }
         });
     });
@@ -167,7 +200,14 @@ suite("Functional Tests", function () {
           if (err) {
             console.log(err);
           } else {
-            assert.notEqual(JSON.parse(res.text), [], "Returned nothing!");
+            const json = JSON.parse(res.text);
+
+            assert.isArray(json, "Returned data should be an array");
+            assert.isAtLeast(
+              json.length,
+              1,
+              "At least 1 object should be returned"
+            );
           }
         });
     });
@@ -180,7 +220,14 @@ suite("Functional Tests", function () {
           if (err) {
             console.log(err);
           } else {
-            assert.notEqual(JSON.parse(res.text), [], "Returned nothing!");
+            const json = JSON.parse(res.text);
+
+            assert.isArray(json, "Returned data should be an array");
+            assert.isAtLeast(
+              json.length,
+              1,
+              "At least 1 object should be returned"
+            );
           }
         });
     });
@@ -197,7 +244,7 @@ suite("Functional Tests", function () {
 
         chai
           .request(server)
-          .put(PATH + "testing")
+          .put(PATH + "test")
           .send(data)
           .end((err, res) => {
             if (err) {
@@ -327,12 +374,11 @@ suite("Functional Tests", function () {
     test("1)  Delete Issue Test", () => {
       connection(async (client) => {
         const ID = await getId(client, "Test 1");
-        const data = { _id: ID };
 
         chai
           .request(server)
           .delete(PATH + "test")
-          .send(data)
+          .send({ _id: ID })
           .end((err, res) => {
             if (err) {
               console.log(err);
@@ -349,12 +395,10 @@ suite("Functional Tests", function () {
     });
 
     test("2)  Invalid _id Test", () => {
-      const data = { _id: "7597e280d35ae174eeddf13c" };
-
       chai
         .request(server)
         .delete(PATH + "testing")
-        .send(data)
+        .send({ _id: "7597e280d35ae174eeddf13c" })
         .end((err, res) => {
           if (err) {
             console.log(err);
@@ -370,12 +414,10 @@ suite("Functional Tests", function () {
     });
 
     test("3)  Missing _id Test", () => {
-      const data = {};
-
       chai
         .request(server)
         .delete(PATH + "testing")
-        .send(data)
+        .send({})
         .end((err, res) => {
           if (err) {
             console.log(err);

@@ -112,6 +112,10 @@ module.exports = (method, data, res, project) => {
             } else if (keys.length === 1) {
               res.json({ error: "no update field(s) sent", _id: data._id });
             } else {
+              if (data.open) {
+                data.open = data.open == "true" ? true : false;
+              }
+
               keys.forEach((k) => {
                 if (k !== "_id") {
                   let ik = "issues.$." + k;
@@ -136,21 +140,25 @@ module.exports = (method, data, res, project) => {
                     res.json({ error: "could not update", _id: data._id });
                   } else {
                     // Updates the assigned project
-                    projects.updateOne({ _id: ID }, projectValues, (err) => {
-                      if (err) {
-                        res.json({
-                          error: "could not update",
-                          _id: data._id,
-                        });
-                      } else {
-                        const obj = {
-                          result: "successfully updated",
-                          _id: data._id,
-                        };
+                    projects.updateOne(
+                      { "issues._id": ID },
+                      projectValues,
+                      (err) => {
+                        if (err) {
+                          res.json({
+                            error: "could not update",
+                            _id: data._id,
+                          });
+                        } else {
+                          const obj = {
+                            result: "successfully updated",
+                            _id: data._id,
+                          };
 
-                        res.json(obj);
+                          res.json(obj);
+                        }
                       }
-                    });
+                    );
                   }
                 });
               }
