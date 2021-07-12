@@ -71,32 +71,40 @@ suite("Functional Tests", function () {
               "created_on",
               "Missing 'created_on' property"
             );
+
             assert.isNumber(
               Date.parse(json.created_on),
               "'created_on' property should be a number"
             );
+
             assert.property(
               json,
               "updated_on",
               "Missing 'updated_on' property"
             );
+
             assert.isNumber(
               Date.parse(json.updated_on),
               "'updated_on' property should be a number"
             );
+
             assert.property(json, "open", "Missing 'open' property");
+
             assert.isBoolean(
               json.open,
               "'open' property should be a boolean value"
             );
+
             assert.isTrue(json.open, "'open' property should be 'true'");
             assert.property(json, "_id", "'_id' property is missing");
             assert.isNotEmpty(json._id, "'_id' should not be empty");
+            
             assert.property(
               json,
               "status_text",
               "'status_text' property is missing"
             );
+            
             assert.isEmpty(json.status_text, "'status_text' should be empty");
           }
         });
