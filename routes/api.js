@@ -68,8 +68,6 @@ module.exports = function(app) {
                   ? true
                   : req.body.open,
                 project: project._id,
-                created_on: new Date(),
-                updated_on: new Date(),
               };
 
               if (
@@ -105,8 +103,6 @@ module.exports = function(app) {
                 ? true
                 : req.body.open,
               project: result._id,
-              created_on: new Date(),
-              updated_on: new Date(),
             };
 
             if (
@@ -131,7 +127,9 @@ module.exports = function(app) {
     .put(function(req, res) {
       crud.getProject(req.params.project).then((project) => {
         if (project !== null) {
-          const data = { updated_on: new Date() };
+          const data = { 
+            updated_on: new Date().toISOString() 
+          };
           let keys = Object.keys(req.body);
           const ID = req.body._id;
 
@@ -158,10 +156,16 @@ module.exports = function(app) {
               if (issue == ID) {
                 crud.updateIssue(ID, data)
                 .then((issue) => {
-                  res.json({ result: "successfully updated", _id: ID });
+                  res.json({ 
+                    result: "successfully updated", 
+                    _id: ID 
+                  });
                 })
                 .catch(() => { 
-                  res.json({ error: "could not update", _id: ID });
+                  res.json({ 
+                    error: "could not update", 
+                    _id: ID 
+                  });
                 });
               }
             });
