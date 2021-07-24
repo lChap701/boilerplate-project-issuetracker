@@ -234,12 +234,17 @@ suite("Functional Tests", function() {
 
   // suite("PUT /api/issues/ Tests", () => {
   //   test("1)  One Field Test", () => {
-  //       crud.getIssue({ issue_title: "Test 1" }).then(
+  //     const PROJECT = "test";
+  //     crud.getProject(PROJECT).then((project) => {
+  //       crud.getIssue({ project: project._Id }).then(
   //         (issue) => {
+  //           console.log(issue);
+  //           const ID = issue._id;
   //           const data = {
-  //             _id: issue._id,
+  //             _id: ID,
   //             issue_text: "Testing updates on one field",
   //           };
+            
 
   //           chai
   //             .request(server)
@@ -259,117 +264,120 @@ suite("Functional Tests", function() {
   //             });
   //         }
   //       );
+  //     });
   //   });
 
-  //   test("2)  Multiple Fields Test", () => {
-  //       crud.getIssue({ issue_title: "Test 2" }).then(
-  //         (issue) => {
-  //           const data = {
-  //             _id: issue._id,
-  //             issue_text: "Testing updates on multiple fields",
-  //             assigned_to: "Smith Johnson"
-  //           };
+    // test("2)  Multiple Fields Test", () => {
+    //   crud.getIssue({ issue_title: "Test 2" }).then(
+    //     (issue) => {
+    //       const ID = issue._id;
+    //       const data = {
+    //         _id: ID,
+    //         issue_text: "Testing updates on multiple fields",
+    //         assigned_to: "John Smith",
+    //         status_text: "Open"
+    //       };
 
-  //           chai
-  //             .request(server)
-  //             .put(PATH + "testing")
-  //             .send(data)
-  //             .end((err, res) => {
-  //               if (err) {
-  //                 console.log(err);
-  //               } else {
-  //                 assert.deepPropertyVal(
-  //                   JSON.parse(res.text),
-  //                   "result",
-  //                   "successfully updated",
-  //                   `'${res.text}' should have a property of 'error' that is equal to 'missing _id'`
-  //                 );
-  //               }
-  //             });
-  //         }
-  //       );
-  //   });
+    //       chai
+    //         .request(server)
+    //         .put(PATH + "testing")
+    //         .send(data)
+    //         .end((err, res) => {
+    //           if (err) {
+    //             console.log(err);
+    //           } else {
+    //             assert.deepPropertyVal(
+    //               JSON.parse(res.text),
+    //               "result",
+    //               "successfully updated",
+    //               `'${res.text}' should have a property of 'result' that is equal to 'successfully updated'`
+    //             );
+    //           }
+    //         });
+    //     }
+    //   );
+    // });
 
-  //   test("3)  No Fields Test", () => {
-  //       crud.getIssue({ issue_title: "Test 2" }).then(
-  //         (issue) => {
-  //           const data = {
-  //             _id: issue._id
-  //           };
+    // test("3)  No Fields Test", () => {
+    //     crud.getIssue({ issue_title: "Test 2" }).then(
+    //       (issue) => {
+    //         const data = {
+    //           _id: issue._id
+    //         };
 
-  //           chai
-  //             .request(server)
-  //             .put(PATH + "testing")
-  //             .send(data)
-  //             .end((err, res) => {
-  //               if (err) {
-  //                 console.log(err);
-  //               } else {
-  //                 assert.deepPropertyVal(
-  //                   JSON.parse(res.text),
-  //                   "error",
-  //                   "no update field(s) sent",
-  //                   `'${res.text}' should have a property of 'error' that is equal to 'no update field(s) sent'`
-  //                 );
-  //               }
-  //             });
-  //         }
-  //       );
-  //   });
+    //         chai
+    //           .request(server)
+    //           .put(PATH + "testing")
+    //           .send(data)
+    //           .end((err, res) => {
+    //             if (err) {
+    //               console.log(err);
+    //             } else {
+    //               assert.deepPropertyVal(
+    //                 JSON.parse(res.text),
+    //                 "error",
+    //                 "no update field(s) sent",
+    //                 `'${res.text}' should have a property of 'error' that is equal to 'no update field(s) sent'`
+    //               );
+    //             }
+    //           });
+    //       }
+    //     );
+    // });
 
-  //   test("4)  No _id Test", () => {
-  //     const data = {
-  //       issue_text: "Testing updates without an _id",
-  //       assigned_to: "John Smith",
-  //       status_text: "Closed",
-  //       open: false,
-  //     };
+    //   test("4)  No _id Test", () => {
+    //     const data = {
+    //       issue_text: "Testing updates without an _id",
+    //       assigned_to: "John Smith",
+    //       status_text: "Closed",
+    //       open: false,
+    //     };
 
-  //     chai
-  //       .request(server)
-  //       .put(PATH + "testing")
-  //       .send(data)
-  //       .end((err, res) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           assert.deepPropertyVal(
-  //             JSON.parse(res.text),
-  //             "error",
-  //             "missing _id",
-  //             `'${res.text}' should have a property of 'error' that is equal to 'missing _id'`
-  //           );
-  //         }
-  //       });
-  //   });
+    //     chai
+    //       .request(server)
+    //       .put(PATH + "testing")
+    //       .send(data)
+    //       .end((err, res) => {
+    //         if (err) {
+    //           console.log(err);
+    //         } else {
+    //           assert.deepPropertyVal(
+    //             JSON.parse(res.text),
+    //             "error",
+    //             "missing _id",
+    //             `'${res.text}' should have a property of 'error' that is equal to 'missing _id'`
+    //           );
+    //         }
+    //       });
+    //   });
 
-  //   test("5)  Invalid _id Test", () => {
-  //     const data = {
-  //       _id: "7597e280d35ae174eeddf13c",
-  //       issue_text: "Testing updates without an invalid _id",
-  //       assigned_to: "John Smith",
-  //       status_text: "Closed",
-  //       open: false,
-  //     };
+    //   test("5)  Invalid _id Test", () => {
+    //     const data = {
+    //       _id: "7597e280d35ae174eeddf13c",
+    //       issue_text: "Testing updates with an invalid _id",
+    //       assigned_to: "John Smith",
+    //       status_text: "Closed",
+    //       open: false,
+    //     };
 
-  //     chai
-  //       .request(server)
-  //       .put(PATH + "test")
-  //       .send(data)
-  //       .end((err, res) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           assert.deepPropertyVal(
-  //             JSON.parse(res.text),
-  //             "error",
-  //             "could not update",
-  //             `'${res.text}' should have a property of 'error' that is equal to 'could not update'`
-  //           );
-  //         }
-  //       });
-  //   });
-  // });
+    //     chai
+    //       .request(server)
+    //       .put(PATH + "test")
+    //       .send(data)
+    //       .end((err, res) => {
+    //         if (err) {
+    //           console.log(err);
+    //         } else {
+    //           assert.deepPropertyVal(
+    //             JSON.parse(res.text),
+    //             "error",
+    //             "could not update",
+    //             `'${res.text}' should have a property of 'error' that is equal to 'could not update'`
+    //           );
+    //         }
+    //       });
+    //   });
+  });
 
   // suite("DELETE /api/issues/ Tests", () => {
   //   test("1)  Delete Issue Test", () => {
