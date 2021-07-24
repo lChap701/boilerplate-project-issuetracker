@@ -12,7 +12,7 @@ const Schema = mongoose.Schema;
 
 const projectSchema = new Schema({
   project_name: String,
-  issues: [{ type: Schema.Types.ObjectId, ref: "Issues" }]
+  issues: [{ type: Schema.Types.ObjectId, ref: "Issues" }],
 });
 
 const issueSchema = new Schema({
@@ -22,9 +22,13 @@ const issueSchema = new Schema({
   assigned_to: String,
   open: Boolean,
   status_text: String,
-  created_on: Date,
-  updated_on: Date,
   project: { type: Schema.Types.ObjectId, ref: "Projects" }
+},
+{
+  timestamps: { 
+    createdAt: "created_on", 
+    updatedAt: "updated_on" 
+  }
 });
 
 // Models
@@ -47,6 +51,6 @@ const crud = {
   getIssue: (data) => Issue.findOne(data),
   updateIssue: (_id, data) => Issue.updateOne({ _id: _id }, data),
   deleteIssue: (_id) => Issue.findByIdAndRemove(_id)
-}
+};
 
 module.exports = crud;
