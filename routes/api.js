@@ -23,9 +23,7 @@ module.exports = function (app) {
           if (keys.length == 0) {
             crud.getAllIssues(project._id).then((issues) => res.json(issues));
           } else {
-            let data = {
-              project: project._id,
-            };
+            let data = { project: project._id };
 
             keys.forEach((key) => {
               data[key] = req.query[key];
@@ -59,9 +57,7 @@ module.exports = function (app) {
     .put(function (req, res) {
       crud.getProject(req.params.project).then((project) => {
         if (project !== null) {
-          const data = {
-            updated_on: new Date().toISOString(),
-          };
+          const data = { updated_on: new Date() };
           let keys = Object.keys(req.body);
           const ID = req.body._id;
 
@@ -94,7 +90,7 @@ module.exports = function (app) {
                       _id: ID,
                     });
                   })
-                  .catch(() => {
+                  .catch((e) => {
                     res.json({
                       error: "could not update",
                       _id: ID,
@@ -112,6 +108,8 @@ module.exports = function (app) {
     .delete(function (req, res) {
       crud.getProject(req.params.project).then((project) => {
         if (project !== null) {
+        } else {
+          res.json([]);
         }
       });
     });
