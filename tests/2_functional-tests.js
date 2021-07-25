@@ -421,6 +421,9 @@ suite("Functional Tests", function () {
         crud.addIssue(exIssue).then((issue) => {
           const ID = issue._id;
 
+          project.issues.push(issue);
+          project.save();
+
           chai
             .request(server)
             .delete(PATH + "test")
