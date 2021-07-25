@@ -56,10 +56,11 @@ module.exports = function (app) {
 
     .put(function (req, res) {
       crud.getProject(req.params.project).then((project) => {
+        const ID = req.body._id;
+        
         if (project !== null) {
           const data = { updated_on: new Date() };
           let keys = Object.keys(req.body);
-          const ID = req.body._id;
 
           // Checks if any fields should be updated
           if (keys.indexOf("_id") === -1) {
@@ -67,6 +68,8 @@ module.exports = function (app) {
           } else if (keys.length === 1) {
             res.json({ error: "no update field(s) sent", _id: ID });
           } else {
+            let found = false;
+            
             keys.forEach((key) => {
               if (key !== "_id") {
                 data[key] = req.body[key];
@@ -75,6 +78,8 @@ module.exports = function (app) {
 
             project.issues.forEach((issue) => {
               if (issue == ID) {
+                found = true;
+
                 crud
                   .updateIssue(ID, data)
                   .then(() =>
@@ -85,9 +90,13 @@ module.exports = function (app) {
                   );
               }
             });
+
+            if (!found) {
+              res.json({ error: "could not update", _id: ID });
+            }
           }
         } else {
-          res.json([]);
+          res.json({ error: "could not update", _id: ID });
         }
       });
     })
