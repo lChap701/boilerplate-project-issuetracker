@@ -384,6 +384,7 @@ suite("Functional Tests", function () {
     test("5)  Invalid _id Test", () => {
       const data = {
         _id: "7597e280d35ae174eeddf13c",
+        issue_title: "Test 7",
         issue_text: "Testing updates with an invalid _id",
         assigned_to: "John Smith",
         status_text: "Closed",
@@ -409,67 +410,76 @@ suite("Functional Tests", function () {
     });
   });
 
-  // suite("DELETE /api/issues/ Tests", () => {
-  //   test("1)  Delete Issue Test", () => {
-  //     connection(async (client) => {
-  //       const ID = await getId(client, "Test 1");
+  suite("DELETE /api/issues/ Tests", () => {
+    test("1)  Delete Issue Test", () => {
+      const exIssue = new Issue("Test 8", "Delete test", "Lucas Chapman");
 
-  //       chai
-  //         .request(server)
-  //         .delete(PATH + "test")
-  //         .send({ _id: ID })
-  //         .end((err, res) => {
-  //           if (err) {
-  //             console.log(err);
-  //           } else {
-  //             assert.deepPropertyVal(
-  //               JSON.parse(res.text),
-  //               "result",
-  //               "successfully deleted",
-  //               `'${res.text}' should have a property of 'result' that is equal to 'successfully deleted'`
-  //             );
-  //           }
-  //         });
-  //     });
-  //   });
+      crud.getProject("test").then((project) => {
+        const PROJECT = project._id;
+        exIssue.project = PROJECT;
 
-  //   test("2)  Invalid _id Test", () => {
-  //     chai
-  //       .request(server)
-  //       .delete(PATH + "testing")
-  //       .send({ _id: "7597e280d35ae174eeddf13c" })
-  //       .end((err, res) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           assert.deepPropertyVal(
-  //             JSON.parse(res.text),
-  //             "error",
-  //             "could not delete",
-  //             `'${res.text}' should have a property of 'error' that is equal to 'could not delete'`
-  //           );
-  //         }
-  //       });
-  //   });
+        crud.addIssue(exIssue).then((issue) => {
+          const ID = issue._id;
 
-  //   test("3)  Missing _id Test", () => {
-  //     chai
-  //       .request(server)
-  //       .delete(PATH + "testing")
-  //       .send({})
-  //       .end((err, res) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           assert.deepPropertyVal(
-  //             JSON.parse(res.text),
-  //             "error",
-  //             "missing _id",
-  //             `'${res.text}' should have a property of 'error' that is equal to 'missing _id'`
-  //           );
-  //         }
-  //       });
-  //   });
-  // });
-  // });
+          project.issues.push(issue);
+          project.save();
+
+          chai
+            .request(server)
+            .delete(PATH + "test")
+            .send({ _id: ID })
+            .end((err, res) => {
+              if (err) {
+                console.log(err);
+              } else {
+                assert.deepPropertyVal(
+                  JSON.parse(res.text),
+                  "result",
+                  "successfully deleted",
+                  `'${res.text}' should have a property of 'result' that is equal to 'successfully deleted'`
+                );
+              }
+            });
+        });
+      });
+    });
+
+    test("2)  Invalid _id Test", () => {
+      chai
+        .request(server)
+        .delete(PATH + "fail")
+        .send({ _id: "7597e280d35ae174eeddf13c" })
+        .end((err, res) => {
+          if (err) {
+            console.log(err);
+          } else {
+            assert.deepPropertyVal(
+              JSON.parse(res.text),
+              "error",
+              "could not delete",
+              `'${res.text}' should have a property of 'error' that is equal to 'could not delete'`
+            );
+          }
+        });
+    });
+
+    test("3)  Missing _id Test", () => {
+      chai
+        .request(server)
+        .delete(PATH + "fail")
+        .send({})
+        .end((err, res) => {
+          if (err) {
+            console.log(err);
+          } else {
+            assert.deepPropertyVal(
+              JSON.parse(res.text),
+              "error",
+              "missing _id",
+              `'${res.text}' should have a property of 'error' that is equal to 'missing _id'`
+            );
+          }
+        });
+    });
+  });
 });

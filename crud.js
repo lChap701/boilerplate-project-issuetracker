@@ -49,7 +49,7 @@ const crud = {
   getAllIssues: (_id) => Issue.find({ project: _id }),
   getIssues: (data) => Issue.find(data),
   updateIssue: (_id, data) => Issue.updateOne({ _id: _id }, data),
-  deleteIssue: (_id) => Issue.findByIdAndRemove(_id),
+  deleteIssue: (_id) => Issue.deleteOne({ _id: _id }),
 };
 
 module.exports = crud;
