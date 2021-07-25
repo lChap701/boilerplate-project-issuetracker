@@ -1,7 +1,8 @@
+const Issue = require("./issue");
 const crud = require("./crud");
 
 /**
- * Adds data to the DB and displays the result
+ * Module that adds data to the DB and displays the result
  * @module ./addData
  *
  * @param {*} data      Represents the data that was submitted
@@ -9,15 +10,15 @@ const crud = require("./crud");
  * @param {*} res       Represents the response that is returned
  */
 module.exports = function addData(data, project, res) {
-  const issue = {
-    issue_title: data.issue_title,
-    issue_text: data.issue_text,
-    created_by: data.created_by,
-    assigned_to: data.assigned_to === undefined ? "" : data.assigned_to,
-    status_text: data.status_text === undefined ? "" : data.status_text,
-    open: data.open === undefined ? true : data.open,
-    project: project._id,
-  };
+  const issue = new Issue(
+    data.issue_title,
+    data.issue_text,
+    data.created_by,
+    data.assigned_to,
+    data.status_text,
+    data.open,
+    project._id
+  );
 
   if (
     issue.issue_title !== undefined &&
