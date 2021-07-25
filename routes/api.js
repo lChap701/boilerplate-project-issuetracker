@@ -104,7 +104,7 @@ module.exports = function (app) {
     .delete(function (req, res) {
       if (req.body._id) {
         const ID = req.body._id;
-        
+
         crud.getProject(req.params.project).then((project) => {
           if (project !== null) {
             let found = false;
@@ -115,18 +115,23 @@ module.exports = function (app) {
 
                 crud
                   .deleteIssue(ID)
-                  .then(() =>
-                    res.json({ result: "successfully deleted", _id: ID })
-                  )
+                  .then(() => {
+                    project.issues = project.issues.filter(
+                      (issue) => issue != ID
+                    );
+                    project.save();
+
+                    res.json({ result: "successfully deleted", _id: ID });
+                  })
                   .catch(() =>
                     res.json({ error: "could not delete", _id: ID })
                   );
               }
-
-              if (!found) {
-                res.json({ error: "could not delete", _id: ID });
-              }
             });
+
+            if (!found) {
+              res.json({ error: "could not delete", _id: ID });
+            }
           } else {
             res.json({ error: "could not delete", _id: ID });
           }
