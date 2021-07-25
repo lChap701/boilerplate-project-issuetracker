@@ -6,7 +6,7 @@ const addData = require("../addData");
 
 /**
  * Module that handles most of the routing
- * @module ./routes/api.js
+ * @module ./routes/api
  *
  * @param {Express} app   Represents the Express application
  *
