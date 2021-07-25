@@ -57,7 +57,7 @@ module.exports = function (app) {
     .put(function (req, res) {
       crud.getProject(req.params.project).then((project) => {
         const ID = req.body._id;
-        
+
         if (project !== null) {
           const data = { updated_on: new Date() };
           let keys = Object.keys(req.body);
@@ -69,7 +69,7 @@ module.exports = function (app) {
             res.json({ error: "no update field(s) sent", _id: ID });
           } else {
             let found = false;
-            
+
             keys.forEach((key) => {
               if (key !== "_id") {
                 data[key] = req.body[key];
@@ -102,11 +102,37 @@ module.exports = function (app) {
     })
 
     .delete(function (req, res) {
-      crud.getProject(req.params.project).then((project) => {
-        if (project !== null) {
-        } else {
-          res.json([]);
-        }
-      });
+      if (req.body._id) {
+        const ID = req.body._id;
+        
+        crud.getProject(req.params.project).then((project) => {
+          if (project !== null) {
+            let found = false;
+
+            project.issues.forEach((issue) => {
+              if (issue == ID) {
+                found = true;
+
+                crud
+                  .deleteIssue(ID)
+                  .then(() =>
+                    res.json({ result: "successfully deleted", _id: ID })
+                  )
+                  .catch(() =>
+                    res.json({ error: "could not delete", _id: ID })
+                  );
+              }
+
+              if (!found) {
+                res.json({ error: "could not delete", _id: ID });
+              }
+            });
+          } else {
+            res.json({ error: "could not delete", _id: ID });
+          }
+        });
+      } else {
+        res.json({ error: "missing _id" });
+      }
     });
 };
