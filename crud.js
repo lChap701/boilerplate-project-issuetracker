@@ -15,28 +15,30 @@ const projectSchema = new Schema({
   issues: [{ type: Schema.Types.ObjectId, ref: "Issues" }],
 });
 
-const issueSchema = new Schema({
-  issue_title: String,
-  issue_text: String,
-  created_by: String,
-  assigned_to: String,
-  open: Boolean,
-  status_text: String,
-  project: { type: Schema.Types.ObjectId, ref: "Projects" }
-},
-{
-  timestamps: { 
-    createdAt: "created_on", 
-    updatedAt: "updated_on" 
+const issueSchema = new Schema(
+  {
+    issue_title: String,
+    issue_text: String,
+    created_by: String,
+    assigned_to: String,
+    open: Boolean,
+    status_text: String,
+    project: { type: Schema.Types.ObjectId, ref: "Projects" },
+  },
+  {
+    timestamps: {
+      createdAt: "created_on",
+      updatedAt: "updated_on",
+    },
   }
-});
+);
 
 // Models
 const Project = mongoose.model("Projects", projectSchema);
 const Issue = mongoose.model("Issues", issueSchema);
 
 /**
- * Runs CRUD operations once connected to the DB
+ * Module for running CRUD operations once connected to the DB
  * @module ./crud
  *
  */
@@ -46,9 +48,8 @@ const crud = {
   getProject: (title) => Project.findOne({ project_name: title }),
   getAllIssues: (_id) => Issue.find({ project: _id }),
   getIssues: (data) => Issue.find(data),
-  getIssue: (data) => Issue.findOne(data),
   updateIssue: (_id, data) => Issue.updateOne({ _id: _id }, data),
-  deleteIssue: (_id) => Issue.findByIdAndRemove(_id)
+  deleteIssue: (_id) => Issue.findByIdAndRemove(_id),
 };
 
 module.exports = crud;
