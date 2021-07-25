@@ -65,15 +65,8 @@ module.exports = function (app) {
           if (keys.indexOf("_id") === -1) {
             res.json({ error: "missing _id" });
           } else if (keys.length === 1) {
-            res.json({
-              error: "no update field(s) sent",
-              _id: ID,
-            });
+            res.json({ error: "no update field(s) sent", _id: ID });
           } else {
-            // if (req.body.open) {
-            //   req.body.open = req.body.open == "true" ? true : false;
-            // }
-
             keys.forEach((key) => {
               if (key !== "_id") {
                 data[key] = req.body[key];
@@ -84,18 +77,12 @@ module.exports = function (app) {
               if (issue == ID) {
                 crud
                   .updateIssue(ID, data)
-                  .then((issue) => {
-                    res.json({
-                      result: "successfully updated",
-                      _id: ID,
-                    });
-                  })
-                  .catch((e) => {
-                    res.json({
-                      error: "could not update",
-                      _id: ID,
-                    });
-                  });
+                  .then(() =>
+                    res.json({ result: "successfully updated", _id: ID })
+                  )
+                  .catch(() =>
+                    res.json({ error: "could not update", _id: ID })
+                  );
               }
             });
           }
