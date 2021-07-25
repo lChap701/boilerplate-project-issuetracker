@@ -43,9 +43,7 @@ const Issue = mongoose.model("Issues", issueSchema);
 const crud = {
   addProject: (data) => new Project(data).save(),
   addIssue: (data) => new Issue(data).save(),
-  getProject: (title) => Project.findOne(
-    { project_name: title }
-  ),
+  getProject: (title) => Project.findOne({ project_name: title }),
   getAllIssues: (_id) => Issue.find({ project: _id }),
   getIssues: (data) => Issue.find(data),
   getIssue: (data) => Issue.findOne(data),
