@@ -4,6 +4,10 @@
 const crud = require("../crud");
 const addData = require("../addData");
 
+const BadWords = require("bad-words");
+let filter = new BadWords();
+filter.removeWords("dick", "pussy");
+
 /**
  * Module that handles most of the routing
  * @module ./routes/api
@@ -44,6 +48,11 @@ module.exports = function (app) {
             project_name: req.params.project,
             issues: [],
           };
+
+          if (filter.isProfane(data.project_name)) {
+            res.json({ error: "No curse words are allowed" });
+            return;
+          }
 
           crud.addProject(data).then((project) => {
             addData(req.body, project, res);

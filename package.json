@@ -8,6 +8,7 @@
 		"test": "mocha --timeout 5000 --recursive --exit --ui tdd tests/"
 	},
 	"dependencies": {
+		"bad-words": "^3.0.4",
 		"body-parser": "^1.19.0",
 		"chai": "^4.2.0",
 		"chai-http": "^4.3.0",
